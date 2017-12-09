@@ -4,13 +4,16 @@ import ReactDOM from 'react-dom'
 import MovementList from './components/MovementList/MovementList'
 import AccountList from './components/AccountList/AccountList'
 import AccountForm from './components/AccountForm/AccountForm'
-import FinancialAxios from './utils/FinancialAxios'
 import Loading from './components/Loading/Loading'
+import LoginForm from './components/LoginForm/LoginForm'
+import FinancialAxios from './utils/FinancialAxios'
+
 
 class App extends Component {
   state = {
     loading: true,
     accounts: [],
+    user: {}
   }
 
   componentWillMount() {    
@@ -23,6 +26,10 @@ class App extends Component {
   render() {
     if (this.state.loading) {
       return <Loading />;
+    }
+
+    if (!this.currentUser()) {
+      return <LoginForm login={this.login} />
     }
 
     return (
@@ -46,6 +53,27 @@ class App extends Component {
       .catch(error => {
         config.onError();
       })
+  }
+
+  login = (email, password, config) => {
+    FinancialAxios.post('session/login', { email, password })
+    .then(response => {
+      this.setState({
+        user: response.data
+      });
+      config.onSuccess();
+    })
+    .catch(error => {
+      config.onError();
+    })
+  }
+
+  currentUser() {
+    if (this.state.user.token) {
+      return this.state.user;
+    }
+
+    return false;
   }
 }
 
