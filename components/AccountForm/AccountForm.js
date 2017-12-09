@@ -24,6 +24,17 @@ export default class AccountForm extends Component {
   }
 
   onAccountButtonClick = (event) => {
-    console.log(`Creating account with name ${this.state.accountName}`);
+    this.props.onCreate(
+      this.state.accountName,
+      { onSuccess: this.onAccountCreateSuccess, onError: this.onAccountCreateError }
+    );
+  }
+
+  onAccountCreateSuccess = () => {
+    this.setState({ accountName: '' });
+  }
+
+  onAccountCreateError = () => {
+    console.log('I dont want to live on this planet anymore.');
   }
 }

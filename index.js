@@ -9,23 +9,15 @@ import Loading from './components/Loading/Loading'
 
 class App extends Component {
   state = {
-    loading: true
+    loading: true,
+    accounts: [],
   }
 
-  componentWillMount() {
-    // https://fintac-backend.herokuapp.com/api/v1/status
-    // DanielAxios.get('eggs')
-    //   .then(response => {
-    //     Mom.doCake();
-    //   })
-    FinancialAxios.get('status')
+  componentWillMount() {    
+    FinancialAxios.get('accounts')
       .then(response => {
-        console.log(response.data);
-        this.setState({ loading: false });
+        this.setState({ accounts: response.data, loading: false });
       })
-      // .then(function(response) {
-      //   console.log(response);
-      // })
   }
  
   render() {
@@ -35,10 +27,25 @@ class App extends Component {
 
     return (
       <div className='account-container'>
-        <AccountForm />
-        <AccountList />
+        <AccountForm onCreate={this.buildAccount} />
+        <AccountList data={this.state.accounts} />
       </div>
     );
+  }
+
+  buildAccount = (name, config) => {
+    // { name: name }
+    FinancialAxios.post('accounts', { name, user_id: 1 })
+      .then(response => {
+        // Spread operator, destruir una estructura de datos en su mínima expresión.
+        this.setState({
+          accounts: [...this.state.accounts, response.data]
+        });
+        config.onSuccess();
+      })
+      .catch(error => {
+        config.onError();
+      })
   }
 }
 
