@@ -7,20 +7,13 @@ import AccountForm from './components/AccountForm/AccountForm'
 import Loading from './components/Loading/Loading'
 import LoginForm from './components/LoginForm/LoginForm'
 import FinancialAxios from './utils/FinancialAxios'
-
+import AuthenticatedRequest from './utils/AuthenticatedRequest'
 
 class App extends Component {
   state = {
     loading: false,
     accounts: [],
     user: {}
-  }
-
-  componentWillMount() {
-    // FinancialAxios.get('accounts')
-    //   .then(response => {
-    //     this.setState({ accounts: response.data, loading: false });
-    //   })
   }
  
   render() {
@@ -56,20 +49,29 @@ class App extends Component {
   }
 
   login = (email, password, config) => {
-    FinancialAxios.post('session/login', { email, password })
+    FinancialAxios
+    .post('session/login', { email, password })
     .then(response => {
-      this.setState({
-        user: response.data
-      });
+      const { user, token } = response.data;
+      this.setState({ user, token, loading: true });
       config.onSuccess();
+      this.fetchAccounts();
     })
     .catch(error => {
       config.onError();
     })
   }
 
+  fetchAccounts() {
+    AuthenticatedRequest(this.state.token)
+      .get('accounts')
+      .then(response => {
+        this.setState({ accounts: response.data, loading: false });
+      })
+  }
+
   currentUser() {
-    if (this.state.user.token) {
+    if (this.state.token) {
       return this.state.user;
     }
 
