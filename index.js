@@ -11,16 +11,16 @@ import FinancialAxios from './utils/FinancialAxios'
 
 class App extends Component {
   state = {
-    loading: true,
+    loading: false,
     accounts: [],
     user: {}
   }
 
-  componentWillMount() {    
-    FinancialAxios.get('accounts')
-      .then(response => {
-        this.setState({ accounts: response.data, loading: false });
-      })
+  componentWillMount() {
+    // FinancialAxios.get('accounts')
+    //   .then(response => {
+    //     this.setState({ accounts: response.data, loading: false });
+    //   })
   }
  
   render() {
