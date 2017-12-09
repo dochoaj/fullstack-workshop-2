@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 import MovementList from './components/MovementList/MovementList'
 import AccountList from './components/AccountList/AccountList'
+import AccountForm from './components/AccountForm/AccountForm'
 import FinancialAxios from './utils/FinancialAxios'
 import Loading from './components/Loading/Loading'
 
@@ -32,7 +33,12 @@ class App extends Component {
       return <Loading />;
     }
 
-    return <AccountList />;
+    return (
+      <div className='account-container'>
+        <AccountForm />
+        <AccountList />
+      </div>
+    );
   }
 }
 
