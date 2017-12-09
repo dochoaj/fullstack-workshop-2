@@ -1,0 +1,22 @@
+.movement {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.movement-description {
+  display: flex;
+}
+
+.movement-amount {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.possitive {
+  background-color: green;
+}
+
+.negative {
+  background-color: red;
+}
