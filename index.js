@@ -13,7 +13,8 @@ class App extends Component {
   state = {
     loading: false,
     accounts: [],
-    user: {}
+    user: {},
+    token: null,
   }
  
   render() {
@@ -27,6 +28,7 @@ class App extends Component {
 
     return (
       <div className='account-container'>
+        <button onClick={this.onClickLogout}>Logout</button>
         <AccountForm onCreate={this.buildAccount} />
         <AccountList data={this.state.accounts} />
       </div>
@@ -60,6 +62,14 @@ class App extends Component {
     .catch(error => {
       config.onError();
     })
+  }
+  
+  logout = () => {
+    this.setState({ user: {}, token: null })
+  }
+
+  onClickLogout = (event) => {
+    this.logout()
   }
 
   fetchAccounts() {
